@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Santa Generator</title>
+    <style>
+        body {
+            background-image: url('bgred.jpeg');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            cursor: url('Christmas Santa Claus & Gift Animated--cursor--SweezyCursors (1).png'), auto;
+        }
+        html, body, * {
+            cursor: url('Christmas Santa Claus & Gift Animated--cursor--SweezyCursors (1).png'), auto;
+          }
+        /* Add GIFs in all four corners */
+        .corner-gif {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .top-left { top: 0; left: 0; }
+        .top-right { top: 0; right: 0; }
+        .bottom-left { bottom: 0; left: 0; }
+        .bottom-right { bottom: 0; right: 0; }
+
+        #participantName {
+            width: 50%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #c41e3a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #a01830;
+        }
+
+        #participants li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 8px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        #participants li button {
+            padding: 5px 10px;
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- GIFs in all four corners -->
+    <img src="tenor.gif" class="corner-gif top-left" alt="Christmas GIF">
+    <img src="tenor.gif" class="corner-gif top-right" alt="Christmas GIF">
+    <img src="tenor.gif" class="corner-gif bottom-left" alt="Christmas GIF">
+    <img src="tenor.gif" class="corner-gif bottom-right" alt="Christmas GIF">
+    <div class="container">
+        <h1>🎅 Secret Santa Generator 🎄</h1>
+        <div class="input-section">
+            <h2>Add Participants</h2>
+            <input type="text" id="participantName" placeholder="Enter name">
+            <button onclick="addParticipant()">Add Person</button>
+        </div>
+
+        <div class="participant-list">
+            <h3>Current Participants:</h3>
+            <ul id="participants"></ul>
+        </div>
+
+        <button onclick="generatePairs()">Generate Secret Santa Pairs!</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let participants = [];
+
+        function addParticipant() {
+            const nameInput = document.getElementById('participantName');
+            const name = nameInput.value.trim();
+          
+            if (name) {
+                participants.push(name);
+                nameInput.value = '';
+                updateParticipantList();
+            }
+        }
+
+        function updateParticipantList() {
+            const list = document.getElementById('participants');
+            list.innerHTML = '';
+            participants.forEach((name, index) => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remove';
+                removeBtn.onclick = () => removeParticipant(index);
+                li.appendChild(removeBtn);
+                list.appendChild(li);
+            });
+        }
+
+        function removeParticipant(index) {
+            participants.splice(index, 1);
+            updateParticipantList();
+        }
+
+        function generatePairs() {
+            if (participants.length < 2) {
+                alert('Need at least 2 participants!');
+                return;
+            }
+
+            const shuffled = [...participants].sort(() => Math.random() - 0.5);
+            const results = document.getElementById('results');
+            results.innerHTML = '<h3>Secret Santa Assignments:</h3>';
+
+            shuffled.forEach((giver, index) => {
+                const receiver = shuffled[(index + 1) % shuffled.length];
+                const assignment = document.createElement('p');
+                assignment.textContent = `${giver} → ${receiver}`;
+                results.appendChild(assignment);
+            });
+        }
+    </script>
+</body>
+</html>
